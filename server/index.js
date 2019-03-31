@@ -16,13 +16,11 @@ app.get("/api/todos", (req, res) => {
   db.getTodos((error, data) => {
     if (error) {
       console.log('could not retrieve todos at server :', error);
-      res.status(404).end();
+      res.end();
     }
     console.log('yippee');
     res.send(data);
   });
-  // console.log("successful request!");
-  // res.send("Hi there");
 });
 
 app.post("/api", (req, res) => {

@@ -15,10 +15,11 @@ conn.connect((err) => {
 const addTodo = (req, cb) => {
   conn.query(`INSERT INTO todos (text, status) VALUES ('${req.body.text}', '${req.body.status}')`, (err, result) => {
     if (err) {
-      console.log('could not retrive todos from todos DB :', err);
+      console.log('could not add todo to todos DB :', err);
       cb(err);
     } else {
-      cb(result);
+      console.log('successfully added todo in todos DB');
+      cb(null, result);
     }
   })
 }
@@ -26,10 +27,11 @@ const addTodo = (req, cb) => {
 const reviseTodo = (req, cb) => {
   conn.query(`UPDATE todos SET text = '${req.body.text}', status = '${req.body.status}' WHERE (id=${req.body.id})`, (err, result) => {
     if (err) {
-      console.log('could not retrive todos from todos DB :', err);
+      console.log('could not revise todo in todos DB :', err);
       cb(err);
     } else {
-      cb(result);
+      console.log('successfully revised todo in todos DB');
+      cb(null, result);
     }
   })
 }
@@ -37,10 +39,11 @@ const reviseTodo = (req, cb) => {
 const getTodos = (cb) => {
   conn.query('SELECT * FROM todos', (err, result) => {
     if (err) {
-      console.log('could not retrive todos from todos DB :', err);
+      console.log('could not get todos from todos DB :', err);
       cb(err);
     } else {
-      cb(result);
+      console.log('successfully pulled todos from todos DB');
+      cb(null, result);
     }
   })
 }
