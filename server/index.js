@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const request = require("request");
+const db = require("../database/index");
 
 const app = express();
 
@@ -10,8 +11,25 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use("/", express.static("dist"));
 
-app.get("/api", (req, res) => {
-  console.log("successful request!");
+app.get("/api/todos", (req, res) => {
+  console.log('inside api/todos GET server')
+  db.getTodos((error, data) => {
+    if (error) {
+      console.log('could not retrieve todos at server :', error);
+      res.status(404).end();
+    }
+    console.log('yippee');
+    res.send(data);
+  });
+  // console.log("successful request!");
+  // res.send("Hi there");
+});
+
+app.post("/api", (req, res) => {
+  db.reviseTodo(req.body, (error) => {
+
+  })
+  console.log("successful post!");
   res.send("Hi there");
 });
 
