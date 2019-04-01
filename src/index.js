@@ -7,57 +7,67 @@ class App extends React.Component {
     super(props);
     this.state = {
       todos: [],
-      newTodo: ''
+      newTodo: '',
+      newStatus: '',
+      refresh: 0,
+      revisedTodo: ''
     }
     this.clickHandler = this.clickHandler.bind(this);
     this.changeHandler = this.changeHandler.bind(this);
+    this.selectStatus = this.selectStatus.bind(this);
   }
 
   componentDidMount() {
-    console.log('component did mount')
     axios.get('/api/todos')
       .then((results) => {
-        console.log('1st :', results.data);
         this.setState({ todos: results.data });
       })
-      .catch((error) => {
-        console.log('could not retrieve todos [client] :', error);
-      })
+      .catch('error on GET from client');
   }
 
   changeHandler(e) {
-    e.preventDefault();
-    this.setState({ newTodo: e.target.value });
-    // console.log('coming soon :', this.state.newTodo);
+    // e.preventDefault();
+    this.setState({ newTodo: e.target.value, newStatus: document.getElementById("selectStatus").value });
+  }
+
+  selectStatus(e) {
+    // e.preventDefault();
+    this.setState({ newStatus: document.getElementById("selectStatus").value })
   }
 
   clickHandler(e) {
-    e.preventDefault();
-    console.log(this.state.newTodo);
-    console.log('clicked', e.target);
+    // e.preventDefault();
+    if (e.target.id === 'addTodo' && this.state.newTodo !== '') {
+      axios.post('/api/todos/add', { text: this.state.newTodo, status: this.state.newStatus })
+        .catch('error adding todo at client')
+    } else {
+      //DELETE SELECTED TODO
+      axios.post('/api/todos/delete', { id: e.target.id })
+        .catch('error adding todo at client')
+    }
+    // this.setState({ refresh: this.state.refresh++ })
   }
 
   render() {
+    const pageRefresh = this.state.refresh;
     const listedTodos = this.state.todos.map(todo => (
-      <tr>
-        <td><li>{todo.text}</li></td>
+      <form onSubmit={this.clickHandler}>
+        <td><h3 type='text' placeholder={todo.text} onChange={this.changeHandler} size='38' value={this.state.revisedTodo} >{todo.text}</h3></td>
         <td><p> => </p></td>
-        <td><select value={todo.status}><option>{'planned'}</option><option>{'in progress'}</option><option>{'completed'}</option></select></td>
-        <td><button onClick={this.deleteTodo}>Delete todo</button></td>
-      </tr>
+        <td><p>status: {todo.status}</p></td>
+        {/* <td><select value={todo.status}><option>{'planned'}</option><option>{'in progress'}</option><option>{'completed'}</option></select></td> */}
+        <td><input type='submit' id={todo.id} onClick={this.clickHandler} value='delete todo' /></td>
+      </form>
     ));
     return (
       <div>
         <h1>Todos List</h1>
-        {/* <table> */}
-        {/* <tr> */}
-        <dt><input type='text' placeholder='add new todo' onChange={this.changeHandler} size='38'></input>
-          <select><option>{'planned'}</option><option>{'in progress'}</option><option>{'completed'}</option></select>
-          <button onClick={this.clickHandler}>Add todo</button>
-        </dt>
-        {/* </tr> */}
+        <form onSubmit={this.clickHandler}>
+          <input type='text' placeholder='add new todo' onChange={this.changeHandler} size='38' value={this.state.newTodo} />
+          <select id='selectStatus' onChange={this.selectStatus}><option>{'planned'}</option><option>{'in progress'}</option><option>{'completed'}</option></select>
+          <input type='submit' id='addTodo' onClick={this.clickHandler} value='Add todo' />
+        </form>
         {listedTodos}
-        {/* </table> */}
       </div>
     )
   }

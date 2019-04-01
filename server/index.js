@@ -11,6 +11,32 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use("/", express.static("dist"));
 
+app.post("/api/todos/add", (req, res) => {
+  db.addTodo(req, (error) => {
+    if (error) {
+      res.end()
+    }
+    res.status(201).send()
+  })
+});
+
+// app.post("/api/todos/revise", (req, res) => {
+//   db.reviseTodo(req, (error) => {
+
+//   })
+//   console.log("successful post!");
+//   res.send("Hi there");
+// });
+
+app.post("/api/todos/delete", (req, res) => {
+  db.deleteTodo(req, (error) => {
+    if (error) {
+      res.end()
+    }
+    res.status(201).send()
+  })
+});
+
 app.get("/api/todos", (req, res) => {
   console.log('inside api/todos GET server')
   db.getTodos((error, data) => {
@@ -23,12 +49,6 @@ app.get("/api/todos", (req, res) => {
   });
 });
 
-app.post("/api", (req, res) => {
-  db.reviseTodo(req.body, (error) => {
 
-  })
-  console.log("successful post!");
-  res.send("Hi there");
-});
 
 app.listen(3000, () => console.log("Now listening on port 3000!"));

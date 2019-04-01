@@ -13,13 +13,13 @@ conn.connect((err) => {
 })
 
 const addTodo = (req, cb) => {
-  conn.query(`INSERT INTO todos (text, status) VALUES ('${req.body.text}', '${req.body.status}')`, (err, result) => {
+  conn.query(`INSERT INTO todos (text, status) VALUES ('${req.body.text}', '${req.body.status}')`, (err) => {
     if (err) {
       console.log('could not add todo to todos DB :', err);
       cb(err);
     } else {
       console.log('successfully added todo in todos DB');
-      cb(null, result);
+      cb(null);
     }
   })
 }
@@ -32,6 +32,18 @@ const reviseTodo = (req, cb) => {
     } else {
       console.log('successfully revised todo in todos DB');
       cb(null, result);
+    }
+  })
+}
+
+const deleteTodo = (req, cb) => {
+  conn.query(`DELETE FROM todos WHERE id = '${req.body.id}'`, (err) => {
+    if (err) {
+      console.log('could not delete todo in todos DB :', err);
+      cb(err);
+    } else {
+      console.log('successfully deleted todo in todos DB');
+      cb(null);
     }
   })
 }
@@ -50,4 +62,4 @@ const getTodos = (cb) => {
 
 
 
-module.exports = { addTodo, reviseTodo, getTodos };
+module.exports = { addTodo, reviseTodo, deleteTodo, getTodos };
