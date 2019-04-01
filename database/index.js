@@ -24,8 +24,20 @@ const addTodo = (req, cb) => {
   })
 }
 
-const reviseTodo = (req, cb) => {
-  conn.query(`UPDATE todos SET text = '${req.body.text}', status = '${req.body.status}' WHERE (id=${req.body.id})`, (err, result) => {
+const updateTodoStatus = (req, cb) => {
+  conn.query(`UPDATE todos SET status = '${req.body.status}' WHERE (id=${req.body.id})`, (err, result) => {
+    if (err) {
+      console.log('could not revise todo in todos DB :', err);
+      cb(err);
+    } else {
+      console.log('successfully revised todo in todos DB');
+      cb(null, result);
+    }
+  })
+}
+
+const reviseTodoText = (req, cb) => {
+  conn.query(`UPDATE todos SET text = '${req.body.text}' WHERE (id=${req.body.id})`, (err, result) => {
     if (err) {
       console.log('could not revise todo in todos DB :', err);
       cb(err);
@@ -60,6 +72,4 @@ const getTodos = (cb) => {
   })
 }
 
-
-
-module.exports = { addTodo, reviseTodo, deleteTodo, getTodos };
+module.exports = { addTodo, updateTodoStatus, reviseTodoText, deleteTodo, getTodos };

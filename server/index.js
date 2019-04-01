@@ -20,13 +20,14 @@ app.post("/api/todos/add", (req, res) => {
   })
 });
 
-// app.post("/api/todos/revise", (req, res) => {
-//   db.reviseTodo(req, (error) => {
-
-//   })
-//   console.log("successful post!");
-//   res.send("Hi there");
-// });
+app.post("/api/todos/updatestatus", (req, res) => {
+  db.updateTodoStatus(req, (error) => {
+    if (error) {
+      res.end()
+    }
+    res.status(201).send()
+  })
+});
 
 app.post("/api/todos/delete", (req, res) => {
   db.deleteTodo(req, (error) => {
