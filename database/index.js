@@ -1,10 +1,11 @@
 const mysql = require('mysql');
+require('dotenv').config();
 
 const conn = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'todos'
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_DB
 })
 
 conn.connect((err) => {
@@ -36,8 +37,8 @@ const updateTodoStatus = (req, cb) => {
   })
 }
 
-const reviseTodoText = (req, cb) => {
-  conn.query(`UPDATE todos SET text = '${req.body.text}' WHERE (id=${req.body.id})`, (err, result) => {
+const updateTodo = (req, cb) => {
+  conn.query(`UPDATE todos SET text = '${req.body.text}', status = '${req.body.status}' WHERE (id=${req.body.id})`, (err, result) => {
     if (err) {
       console.log('could not revise todo in todos DB :', err);
       cb(err);
@@ -72,4 +73,4 @@ const getTodos = (cb) => {
   })
 }
 
-module.exports = { addTodo, updateTodoStatus, reviseTodoText, deleteTodo, getTodos };
+module.exports = { addTodo, updateTodoStatus, updateTodo, deleteTodo, getTodos };

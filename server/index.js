@@ -29,6 +29,15 @@ app.post("/api/todos/updatestatus", (req, res) => {
   })
 });
 
+app.post("/api/todos/updatetodo", (req, res) => {
+  db.updateTodo(req, (error) => {
+    if (error) {
+      res.end()
+    }
+    res.status(201).send()
+  })
+});
+
 app.post("/api/todos/delete", (req, res) => {
   db.deleteTodo(req, (error) => {
     if (error) {
