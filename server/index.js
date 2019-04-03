@@ -48,13 +48,11 @@ app.post("/api/todos/delete", (req, res) => {
 });
 
 app.get("/api/todos", (req, res) => {
-  console.log('inside api/todos GET server')
   db.getTodos((error, data) => {
     if (error) {
       console.log('could not retrieve todos at server :', error);
       res.end();
     }
-    console.log('yippee');
     res.send(data);
   });
 });

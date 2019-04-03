@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
+import Todo from './todo';
+import TodosList from './todoList';
 
 class App extends React.Component {
   constructor(props) {
@@ -18,7 +20,8 @@ class App extends React.Component {
   componentDidMount() {
     axios.get('/api/todos')
       .then((results) => {
-        this.setState({ todos: results.data });
+        this.setState({ todos: results.data }, () => {
+        });
       })
       .catch('error on GET from client');
   }
@@ -35,6 +38,8 @@ class App extends React.Component {
 
   clickHandler(e) {
     // e.preventDefault();
+    console.log('eti :', e.target.id)
+    console.log('etv :', e.target.value)
     if (e.target.id === 'addTodo' && this.state.newTodo !== '') {
       axios.post('/api/todos/add', { text: this.state.newTodo, status: this.state.newStatus })
         .catch('error adding todo at client')
@@ -52,12 +57,6 @@ class App extends React.Component {
   }
 
   render() {
-    const pageRefresh = this.state.refresh;
-    const updateTodoText = (
-      <div>
-        <input placeholder="enter revised todo text here"></input>
-      </div>
-    );
     const listedTodos = this.state.todos.map(todo => (
       <ul>
         <span><b>{todo.text}</b></span>
@@ -70,14 +69,8 @@ class App extends React.Component {
       <div>
         <h1>Todos List</h1>
         <h4>this text field and dropdown menu can be used for any todo</h4>
-        <form onSubmit={this.clickHandler}>
-          <input type='text' placeholder='add new todo' onChange={this.changeHandler} size='38' value={this.state.newTodo} />
-          <select id='selectStatus' onChange={this.selectStatus}><option>{'planned'}</option><option>{'in progress'}</option><option>{'completed'}</option></select>
-          <input type='submit' id='addTodo' onClick={this.clickHandler} value='Add todo' />
-        </form>
-        <form onSubmit={this.clickHandler} name='todos'>
-          {listedTodos}
-        </form>
+        <Todo clickHandler={this.clickHandler} changeHandler={this.changeHandler} newTodo={this.state.newTodo} selectStatus={this.selectStatus} />
+        <TodosList todos={this.state.todos} clickHandler={this.clickHandler} />
       </div>
     )
   }
