@@ -76,8 +76,6 @@ class App extends React.Component {
         <h4>this text field and dropdown menu can be used for any todo</h4>
         <Todo clickHandler={this.clickHandler} changeHandler={this.changeHandler} newTodo={this.state.newTodo} selectStatus={this.selectStatus} />
         <TodosList todos={this.state.todos} clickHandler={this.clickHandler} />
-        <button onclick={this.learn}>LEARN 12345</button>
-        <p>test : {this.state.learn}</p>
       </div>
     )
   }
