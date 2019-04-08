@@ -1,7 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const request = require("request");
+// const request = require("request");
 const db = require("../database/index");
+const router = require('./routes')
 
 const app = express();
 
@@ -10,6 +11,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use("/", express.static("dist"));
+// app.use(require('./routes'));
 
 app.post("/api/todos/add", (req, res) => {
   db.addTodo(req, (error) => {
@@ -57,6 +59,12 @@ app.get("/api/todos", (req, res) => {
   });
 });
 
+// app.use('api/todos/add', router);
+// app.use('api/todos/updatestatus', router);
+// app.use('api/todos/updatetodo', router);
+// app.use('api/todos/delete', router);
+// app.use('api/todos', router);
 
+const PORT = process.env.PORT || 3003;
 
-app.listen(3000, () => console.log("Now listening on port 3000!"));
+app.listen(PORT, () => console.log(`Now listening on port ${PORT}!`));

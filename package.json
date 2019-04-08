@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack --config ./webpack.config.js -w --mode production",
+    "start": "webpack --config ./webpack.config.js -w --mode production --watch",
     "server-dev": "nodemon server"
   },
   "author": "Nick Fredman",

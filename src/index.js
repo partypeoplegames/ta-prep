@@ -10,11 +10,13 @@ class App extends React.Component {
     this.state = {
       todos: [],
       newTodo: '',
-      newStatus: 'planned'
+      newStatus: 'planned',
+      learn: 'true'
     }
     this.clickHandler = this.clickHandler.bind(this);
     this.changeHandler = this.changeHandler.bind(this);
     this.selectStatus = this.selectStatus.bind(this);
+    this.learn = this.learn.bind(this);
   }
 
   componentDidMount() {
@@ -38,8 +40,8 @@ class App extends React.Component {
 
   clickHandler(e) {
     // e.preventDefault();
-    console.log('eti :', e.target.id)
-    console.log('etv :', e.target.value)
+    // console.log("eti :", e.target.id)
+    // console.log('etv :', e.target.value)
     if (e.target.id === 'addTodo' && this.state.newTodo !== '') {
       axios.post('/api/todos/add', { text: this.state.newTodo, status: this.state.newStatus })
         .catch('error adding todo at client')
@@ -56,21 +58,26 @@ class App extends React.Component {
     }
   }
 
+  learn() {
+    // e.preventDefault();
+    if (this.state.learn === 'true') this.setState({ learn: 'false' }, () => {
+      alert("learn button clicked :", this.state.learn)
+    });
+    else this.setState({ learn: 'true' }, () => {
+      alert("learn updated :", this.state.learn)
+    });
+  }
+
   render() {
-    const listedTodos = this.state.todos.map(todo => (
-      <ul>
-        <span><b>{todo.text}</b></span>
-        <span>=>[status: {todo.status}]</span>
-        <td><input type='submit' id={todo.id} name='deleteButton' onClick={this.clickHandler} value='delete todo' /></td>
-        <td><input type='submit' id={todo.id} name='updateButton' onClick={this.clickHandler} value='update todo' /></td>
-      </ul>
-    ));
+
     return (
       <div>
-        <h1>Todos List</h1>
+        <h1 onclick={() => console.log('clicked the header')}>Todos List</h1>
         <h4>this text field and dropdown menu can be used for any todo</h4>
         <Todo clickHandler={this.clickHandler} changeHandler={this.changeHandler} newTodo={this.state.newTodo} selectStatus={this.selectStatus} />
         <TodosList todos={this.state.todos} clickHandler={this.clickHandler} />
+        <button onclick={this.learn}>LEARN 12345</button>
+        <p>test : {this.state.learn}</p>
       </div>
     )
   }
